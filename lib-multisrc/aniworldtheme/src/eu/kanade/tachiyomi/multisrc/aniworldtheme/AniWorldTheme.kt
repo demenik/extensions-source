@@ -134,7 +134,8 @@ abstract class AniWorldTheme(
         anime.title = document.selectFirst("div.series-title h1 span")!!.text()
         anime.thumbnail_url = baseUrl +
             document.selectFirst("div.seriesCoverBox img")!!.attr("data-src")
-        anime.genre = document.select("div.genres ul li").joinToString { it.text() }
+        anime.genre = document.select("div.genres ul li").map { it.text() }
+            .filter { !it.contains(Regex("""\+ \d+""")) }.joinToString()
         anime.description = document.selectFirst("p.seri_des")!!.attr("data-full-description")
         document.selectFirst("div.cast li:contains(Produzent:) ul")?.let {
             val author = it.select("li").joinToString { li -> li.text() }
